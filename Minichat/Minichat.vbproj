@@ -140,8 +140,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ico.ico" />
-    <Content Include="images\nyan-cat-art-1.jpg" />
-    <None Include="Resources\nyan-cat-art-1.jpg" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">

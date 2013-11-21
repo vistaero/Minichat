@@ -25,8 +25,8 @@ Partial Class Form1
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.TextBox1 = New System.Windows.Forms.TextBox()
-        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.txtDatosRecibidos = New System.Windows.Forms.TextBox()
+        Me.txtMensaje = New System.Windows.Forms.TextBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
@@ -40,30 +40,30 @@ Partial Class Form1
         Me.NotifyIcon1.Text = "NotifyIcon1"
         Me.NotifyIcon1.Visible = True
         '
-        'TextBox1
+        'txtDatosRecibidos
         '
-        Me.TextBox1.BackColor = System.Drawing.Color.White
-        Me.TextBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TextBox1.Location = New System.Drawing.Point(0, 0)
-        Me.TextBox1.Multiline = True
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.ReadOnly = True
-        Me.TextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.TextBox1.Size = New System.Drawing.Size(620, 428)
-        Me.TextBox1.TabIndex = 0
+        Me.txtDatosRecibidos.BackColor = System.Drawing.Color.White
+        Me.txtDatosRecibidos.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtDatosRecibidos.Location = New System.Drawing.Point(0, 0)
+        Me.txtDatosRecibidos.Multiline = True
+        Me.txtDatosRecibidos.Name = "txtDatosRecibidos"
+        Me.txtDatosRecibidos.ReadOnly = True
+        Me.txtDatosRecibidos.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtDatosRecibidos.Size = New System.Drawing.Size(620, 428)
+        Me.txtDatosRecibidos.TabIndex = 0
         '
-        'TextBox2
+        'txtMensaje
         '
-        Me.TextBox2.AcceptsReturn = True
-        Me.TextBox2.Dock = System.Windows.Forms.DockStyle.Top
-        Me.TextBox2.Location = New System.Drawing.Point(0, 0)
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.Size = New System.Drawing.Size(620, 20)
-        Me.TextBox2.TabIndex = 1
+        Me.txtMensaje.AcceptsReturn = True
+        Me.txtMensaje.Dock = System.Windows.Forms.DockStyle.Top
+        Me.txtMensaje.Location = New System.Drawing.Point(0, 0)
+        Me.txtMensaje.Name = "txtMensaje"
+        Me.txtMensaje.Size = New System.Drawing.Size(620, 20)
+        Me.txtMensaje.TabIndex = 1
         '
         'Panel1
         '
-        Me.Panel1.Controls.Add(Me.TextBox2)
+        Me.Panel1.Controls.Add(Me.txtMensaje)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Bottom
         Me.Panel1.Location = New System.Drawing.Point(0, 428)
         Me.Panel1.Name = "Panel1"
@@ -72,7 +72,7 @@ Partial Class Form1
         '
         'Panel2
         '
-        Me.Panel2.Controls.Add(Me.TextBox1)
+        Me.Panel2.Controls.Add(Me.txtDatosRecibidos)
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(0, 0)
         Me.Panel2.Name = "Panel2"
@@ -100,8 +100,8 @@ Partial Class Form1
 
     End Sub
     Friend WithEvents NotifyIcon1 As System.Windows.Forms.NotifyIcon
-    Friend WithEvents TextBox1 As System.Windows.Forms.TextBox
-    Friend WithEvents TextBox2 As System.Windows.Forms.TextBox
+    Friend WithEvents txtDatosRecibidos As System.Windows.Forms.TextBox
+    Friend WithEvents txtMensaje As System.Windows.Forms.TextBox
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents Panel2 As System.Windows.Forms.Panel
     Friend WithEvents Timer1 As System.Windows.Forms.Timer
