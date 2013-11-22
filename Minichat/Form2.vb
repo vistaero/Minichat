@@ -1,7 +1,8 @@
 ﻿Public Class Form2
 
     Private Sub Form2_FormClosing(sender As Object, e As FormClosingEventArgs) Handles Me.FormClosing
-        Environment.Exit(0)
+        If TextBox1.Text.Equals("") Then Environment.Exit(0)
+
     End Sub
 
     Private Sub Form2_Load(sender As Object, e As EventArgs) Handles MyBase.Load
