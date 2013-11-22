@@ -19,6 +19,9 @@ Public Class Form1
     'Variables temporales para almacenar los datos recibidos
     Dim DireccIP As String, ContenidoMensaje As String
 
+    'Nombre de usuario
+    Public Usuario As String
+
 #End Region
 
     Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
@@ -32,9 +35,10 @@ Public Class Form1
         ElSocket.Bind(New IPEndPoint(IPAddress.Any, 20145))
         'Habilitamos la opción Broadcast para el socket
         ElSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, True)
-
         HiloRecibir = New Thread(AddressOf RecibirDatos) 'Crea el hilo
         HiloRecibir.Start() 'Inicia el hilo
+        Form2.ShowDialog()
+
     End Sub
 
     Private Sub RecibirDatos()
@@ -69,7 +73,6 @@ Public Class Form1
             'Guarda los datos en variables temporales
             DireccIP = LaIPRemota.Address.ToString
             ContenidoMensaje = Datos.ToString
-            If Datos.Equals("EMERGENCY") Then Environment.Exit(0)
 
             'Invoca al evento que mostrará los datos en txtDatosRecibidos
             txtDatosRecibidos.Invoke(New EventHandler(AddressOf ActualizarTextoMensaje))
@@ -103,7 +106,7 @@ Public Class Form1
             'Contiene la dirección de Broadcast y el puerto utilizado
             Dim DirecciónDestino As New IPEndPoint(IPAddress.Broadcast, 20145)
             'Buffer que guardará los datos hasta que se envíen
-            Dim DatosBytes As Byte() = Encoding.Default.GetBytes(txtMensaje.Text)
+            Dim DatosBytes As Byte() = Encoding.Default.GetBytes(Usuario & ": " & txtMensaje.Text)
 
             'Envía los datos
             ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DirecciónDestino)
@@ -137,6 +140,5 @@ Public Class Form1
         txtDatosRecibidos.SelectionStart = txtDatosRecibidos.Text.Length
         txtDatosRecibidos.ScrollToCaret()
     End Sub
-
 
 End Class
