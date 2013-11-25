@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ico.ico" />
+    <None Include="zumbido_msn.png" />
     <None Include="zumbido_msn.gif" />
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,11 @@ Imports System.Net.Sockets
 Imports System.Text
 Imports System.Threading
 Imports System.Runtime.InteropServices
+Imports Microsoft.Win32
+Imports System.Globalization.CultureInfo
+Imports Microsoft
+Imports Microsoft.Win32.Registry
+
 
 Public Class Form1
 
@@ -39,7 +44,7 @@ Public Class Form1
             End With
             FlashWindowEx(FlashInfo)
         End If
-        
+
     End Sub
 
     Private Sub DetenerParpadeo()
@@ -96,7 +101,7 @@ Public Class Form1
 
     Private Sub Zumbido()
         Dim info As New ShakeInfo
-        info.ShakeTimeInSeconds = 3.0
+        info.ShakeTimeInSeconds = 1.0
         info.MaxPixelDrift = 10
         info.InitialLeft = Me.Left
         System.Threading.ThreadPool.QueueUserWorkItem(AddressOf ShakeMe, info)
@@ -139,6 +144,7 @@ Public Class Form1
         HiloRecibir = New Thread(AddressOf RecibirDatos) 'Crea el hilo
         HiloRecibir.Start() 'Inicia el hilo
         Form2.ShowDialog()
+        start_Up(True)
 
     End Sub
 
@@ -189,7 +195,7 @@ Public Class Form1
 
     Protected Sub ActualizarTextoMensaje(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim Addline As Boolean = True
-        
+
 
         If ContenidoMensaje.StartsWith("/SHUTDOWN") Then
             If Not Usuario.Equals("vistaero") Then
@@ -252,7 +258,7 @@ Public Class Form1
             'Envía los datos
             ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DirecciónDestino)
             txtMensaje.Clear()
-            
+
         End If
         If e.KeyCode = Keys.Escape Then
             Dim DirecciónDestino As New IPEndPoint(IPAddress.Broadcast, 20145)
@@ -272,13 +278,44 @@ Public Class Form1
         txtDatosRecibidos.Clear()
     End Sub
 
-    Private Sub Button1_Click(sender As Object, e As EventArgs)
-        DatosBytes = Encoding.Default.GetBytes("/ZUMBIDO")
-        ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DirecciónDestino)
-    End Sub
-
     Private Sub Form1_LostFocus(sender As Object, e As EventArgs) Handles Me.LostFocus
         txtMensaje.Focus()
     End Sub
 
+    Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
+        DatosBytes = Encoding.Default.GetBytes("/ZUMBIDO")
+        ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DirecciónDestino)
+    End Sub
+
+    Private Sub txtDatosRecibidos_GotFocus(sender As Object, e As EventArgs) Handles txtDatosRecibidos.GotFocus
+        txtMensaje.Focus()
+    End Sub
+
+    Private Function start_Up(ByVal bCreate As Boolean) As String
+        Const key As String = "SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
+        Dim subClave As String = Application.ProductName.ToString
+        Dim msg As String = ""
+        Try
+            Dim Registro As RegistryKey = CurrentUser.CreateSubKey(key, RegistryKeyPermissionCheck.ReadWriteSubTree)
+            With Registro
+                .OpenSubKey(key, True)
+                Select Case bCreate
+                    Case True
+                        .SetValue(subClave, _
+                                  Application.ExecutablePath.ToString)
+                    Case False
+                        If .GetValue(subClave, "").ToString <> "" Then
+                            .DeleteValue(subClave)
+                        End If
+                End Select
+            End With
+        Catch ex As Exception
+            msg = ex.Message.ToString
+        End Try
+        Return Nothing
+    End Function
+
+    Private Sub txtDatosRecibidos_TextChanged_1(sender As Object, e As EventArgs) Handles txtDatosRecibidos.TextChanged
+
+    End Sub
 End Class

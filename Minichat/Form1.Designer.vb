@@ -28,10 +28,15 @@ Partial Class Form1
         Me.txtMensaje = New System.Windows.Forms.TextBox()
         Me.txtDatosRecibidos = New System.Windows.Forms.TextBox()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
+        Me.ToolStrip1.SuspendLayout()
+        Me.Panel1.SuspendLayout()
         Me.SuspendLayout()
         '
         'NotifyIcon1
@@ -43,18 +48,22 @@ Partial Class Form1
         'txtMensaje
         '
         Me.txtMensaje.AcceptsReturn = True
-        Me.txtMensaje.Location = New System.Drawing.Point(12, 61)
+        Me.txtMensaje.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtMensaje.Location = New System.Drawing.Point(0, 0)
+        Me.txtMensaje.Multiline = True
         Me.txtMensaje.Name = "txtMensaje"
-        Me.txtMensaje.Size = New System.Drawing.Size(586, 20)
+        Me.txtMensaje.Size = New System.Drawing.Size(620, 36)
         Me.txtMensaje.TabIndex = 1
         '
         'txtDatosRecibidos
         '
+        Me.txtDatosRecibidos.BackColor = System.Drawing.Color.White
         Me.txtDatosRecibidos.Dock = System.Windows.Forms.DockStyle.Fill
         Me.txtDatosRecibidos.Location = New System.Drawing.Point(0, 0)
         Me.txtDatosRecibidos.Multiline = True
         Me.txtDatosRecibidos.Name = "txtDatosRecibidos"
-        Me.txtDatosRecibidos.Size = New System.Drawing.Size(620, 225)
+        Me.txtDatosRecibidos.ReadOnly = True
+        Me.txtDatosRecibidos.Size = New System.Drawing.Size(620, 385)
         Me.txtDatosRecibidos.TabIndex = 2
         '
         'SplitContainer1
@@ -70,10 +79,39 @@ Partial Class Form1
         '
         'SplitContainer1.Panel2
         '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.txtMensaje)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.Panel1)
+        Me.SplitContainer1.Panel2.Controls.Add(Me.ToolStrip1)
         Me.SplitContainer1.Size = New System.Drawing.Size(620, 450)
-        Me.SplitContainer1.SplitterDistance = 225
+        Me.SplitContainer1.SplitterDistance = 385
         Me.SplitContainer1.TabIndex = 4
+        '
+        'ToolStrip1
+        '
+        Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripButton1})
+        Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.ToolStrip1.Name = "ToolStrip1"
+        Me.ToolStrip1.Size = New System.Drawing.Size(620, 25)
+        Me.ToolStrip1.TabIndex = 2
+        Me.ToolStrip1.Text = "ToolStrip1"
+        '
+        'Panel1
+        '
+        Me.Panel1.Controls.Add(Me.txtMensaje)
+        Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.Panel1.Location = New System.Drawing.Point(0, 25)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(620, 36)
+        Me.Panel1.TabIndex = 3
+        '
+        'ToolStripButton1
+        '
+        Me.ToolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image
+        Me.ToolStripButton1.Image = CType(resources.GetObject("ToolStripButton1.Image"), System.Drawing.Image)
+        Me.ToolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta
+        Me.ToolStripButton1.Name = "ToolStripButton1"
+        Me.ToolStripButton1.Size = New System.Drawing.Size(23, 22)
+        Me.ToolStripButton1.Text = "Zumbido"
         '
         'Form1
         '
@@ -90,6 +128,10 @@ Partial Class Form1
         Me.SplitContainer1.Panel2.PerformLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
+        Me.ToolStrip1.ResumeLayout(False)
+        Me.ToolStrip1.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -97,5 +139,8 @@ Partial Class Form1
     Friend WithEvents txtMensaje As System.Windows.Forms.TextBox
     Friend WithEvents txtDatosRecibidos As System.Windows.Forms.TextBox
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
+    Friend WithEvents Panel1 As System.Windows.Forms.Panel
+    Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
+    Friend WithEvents ToolStripButton1 As System.Windows.Forms.ToolStripButton
 
 End Class
