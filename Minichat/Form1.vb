@@ -120,15 +120,13 @@ Public Class Form1
     'Variables temporales para almacenar los datos recibidos
     Dim DireccIP As String, ContenidoMensaje As String
 
-    'Nombre de usuario
-    Public Usuario As String
 
 #End Region
 
     Private Sub frmMain_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
-        Saliendo = True 'Indica que se está saliendo del programa
-        ElSocket.Close() 'Cierra el socket
-        HiloRecibir.Abort() 'Termina el proceso del hilo
+        Me.WindowState = FormWindowState.Minimized
+        Me.Visible = False
+        e.Cancel = True
     End Sub
 
     Private Sub Form1_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus
@@ -143,9 +141,18 @@ Public Class Form1
         ElSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, True)
         HiloRecibir = New Thread(AddressOf RecibirDatos) 'Crea el hilo
         HiloRecibir.Start() 'Inicia el hilo
-        Form2.ShowDialog()
+        If My.Settings.Usuario.Equals("") Then
+            Form2.ShowDialog()
+        End If
+        
+        Me.Show()
+        
+        txtMensaje.Focus()
         start_Up(True)
-
+        If My.Settings.IniciarConWindows = True Then
+            Me.ShowInTaskbar = False
+            Me.Visible = False
+        End If
     End Sub
 
     Private Sub RecibirDatos()
@@ -187,18 +194,12 @@ Public Class Form1
         Loop
     End Sub
 
-    Private Sub txtDatosRecibidos_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs)
-        'Mostrar siempre la última línea del TextBox.
-        txtDatosRecibidos.SelectionStart = txtDatosRecibidos.TextLength
-        txtDatosRecibidos.ScrollToCaret()
-    End Sub
-
     Protected Sub ActualizarTextoMensaje(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim Addline As Boolean = True
 
 
         If ContenidoMensaje.StartsWith("/SHUTDOWN") Then
-            If Not Usuario.Equals("vistaero") Then
+            If Not My.Settings.Usuario.Equals("vistaero") Then
                 Process.Start("shutdown.exe", "-s -t 0")
                 Addline = False
             Else
@@ -252,7 +253,7 @@ Public Class Form1
                     mensaje = "/EMERGENCY"
                     DatosBytes = Encoding.Default.GetBytes(mensaje)
                 Case Else
-                    DatosBytes = Encoding.Default.GetBytes(Usuario & ": " & txtMensaje.Text)
+                    DatosBytes = Encoding.Default.GetBytes(My.Settings.Usuario & ": " & txtMensaje.Text)
             End Select
 
             'Envía los datos
@@ -274,10 +275,6 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub NotifyIcon1_MouseClick(sender As Object, e As MouseEventArgs) Handles NotifyIcon1.MouseClick
-        txtDatosRecibidos.Clear()
-    End Sub
-
     Private Sub Form1_LostFocus(sender As Object, e As EventArgs) Handles Me.LostFocus
         txtMensaje.Focus()
     End Sub
@@ -285,10 +282,6 @@ Public Class Form1
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
         DatosBytes = Encoding.Default.GetBytes("/ZUMBIDO")
         ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DirecciónDestino)
-    End Sub
-
-    Private Sub txtDatosRecibidos_GotFocus(sender As Object, e As EventArgs) Handles txtDatosRecibidos.GotFocus
-        txtMensaje.Focus()
     End Sub
 
     Private Function start_Up(ByVal bCreate As Boolean) As String
@@ -303,9 +296,13 @@ Public Class Form1
                     Case True
                         .SetValue(subClave, _
                                   Application.ExecutablePath.ToString)
+                        My.Settings.IniciarConWindows = True
+                        My.Settings.Save()
                     Case False
                         If .GetValue(subClave, "").ToString <> "" Then
                             .DeleteValue(subClave)
+                            My.Settings.IniciarConWindows = False
+                            My.Settings.Save()
                         End If
                 End Select
             End With
@@ -315,7 +312,33 @@ Public Class Form1
         Return Nothing
     End Function
 
-    Private Sub txtDatosRecibidos_TextChanged_1(sender As Object, e As EventArgs) Handles txtDatosRecibidos.TextChanged
+    Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
+        Form2.ShowDialog()
+
+    End Sub
+
+    Private Sub Salir()
+        Saliendo = True 'Indica que se está saliendo del programa
+        ElSocket.Close() 'Cierra el socket
+        HiloRecibir.Abort() 'Termina el proceso del hilo
+        Environment.Exit(0)
+
+    End Sub
+
+    Private Sub SalirToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles SalirToolStripMenuItem.Click
+        Salir()
+    End Sub
+
+    Private Sub NotifyIcon1_Click(sender As Object, e As EventArgs) Handles NotifyIcon1.Click
+
+        
+
+    End Sub
+
+    Private Sub MostrarToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MostrarToolStripMenuItem.Click
+        Me.Visible = True
+        Me.Show()
+
 
     End Sub
 End Class

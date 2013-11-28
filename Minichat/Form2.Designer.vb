@@ -28,7 +28,7 @@ Partial Class Form2
         '
         'TextBox1
         '
-        Me.TextBox1.Location = New System.Drawing.Point(12, 44)
+        Me.TextBox1.Location = New System.Drawing.Point(12, 34)
         Me.TextBox1.Name = "TextBox1"
         Me.TextBox1.Size = New System.Drawing.Size(260, 20)
         Me.TextBox1.TabIndex = 0
@@ -38,15 +38,15 @@ Partial Class Form2
         Me.Label1.AutoSize = True
         Me.Label1.Location = New System.Drawing.Point(12, 9)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(253, 26)
+        Me.Label1.Size = New System.Drawing.Size(147, 13)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Escribe tu nombre de usuario. Te lo pediré cada vez" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "que me abras para molestar."
+        Me.Label1.Text = "Escriba un nombre de usuario"
         '
         'Form2
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(284, 78)
+        Me.ClientSize = New System.Drawing.Size(284, 66)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.TextBox1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
