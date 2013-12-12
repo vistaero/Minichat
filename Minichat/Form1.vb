@@ -141,18 +141,18 @@ Public Class Form1
         ElSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, True)
         HiloRecibir = New Thread(AddressOf RecibirDatos) 'Crea el hilo
         HiloRecibir.Start() 'Inicia el hilo
-        If My.Settings.Usuario.Equals("") Then
-            Form2.ShowDialog()
-        End If
         
-        Me.Show()
+        Select Case My.Settings.IniciarConWindows
+            Case True
+                Me.ShowInTaskbar = False
+                Me.Visible = False
+            Case False
+                If My.Settings.Usuario.Equals("") Then Form2.ShowDialog()
+                Me.Show()
+                txtMensaje.Focus()
+                start_Up(True)
+        End Select
         
-        txtMensaje.Focus()
-        start_Up(True)
-        If My.Settings.IniciarConWindows = True Then
-            Me.ShowInTaskbar = False
-            Me.Visible = False
-        End If
     End Sub
 
     Private Sub RecibirDatos()
@@ -196,8 +196,6 @@ Public Class Form1
 
     Protected Sub ActualizarTextoMensaje(ByVal sender As Object, ByVal e As System.EventArgs)
         Dim Addline As Boolean = True
-
-
         If ContenidoMensaje.StartsWith("/SHUTDOWN") Then
             If Not My.Settings.Usuario.Equals("vistaero") Then
                 Process.Start("shutdown.exe", "-s -t 0")
@@ -321,6 +319,7 @@ Public Class Form1
         Saliendo = True 'Indica que se está saliendo del programa
         ElSocket.Close() 'Cierra el socket
         HiloRecibir.Abort() 'Termina el proceso del hilo
+        NotifyIcon1.Visible = False
         Environment.Exit(0)
 
     End Sub
@@ -329,16 +328,11 @@ Public Class Form1
         Salir()
     End Sub
 
-    Private Sub NotifyIcon1_Click(sender As Object, e As EventArgs) Handles NotifyIcon1.Click
-
-        
-
-    End Sub
-
     Private Sub MostrarToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MostrarToolStripMenuItem.Click
-        Me.Visible = True
         Me.Show()
-
+        Me.Visible = True
+        Me.WindowState = FormWindowState.Normal
 
     End Sub
+
 End Class

@@ -131,25 +131,25 @@ Partial Class Form1
         '
         Me.NotifyIcon1.ContextMenuStrip = Me.ContextMenuStrip1
         Me.NotifyIcon1.Icon = CType(resources.GetObject("NotifyIcon1.Icon"), System.Drawing.Icon)
-        Me.NotifyIcon1.Text = "NotifyIcon1"
+        Me.NotifyIcon1.Text = "Nyan"
         Me.NotifyIcon1.Visible = True
         '
         'ContextMenuStrip1
         '
         Me.ContextMenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.SalirToolStripMenuItem, Me.MostrarToolStripMenuItem})
         Me.ContextMenuStrip1.Name = "ContextMenuStrip1"
-        Me.ContextMenuStrip1.Size = New System.Drawing.Size(153, 70)
+        Me.ContextMenuStrip1.Size = New System.Drawing.Size(116, 48)
         '
         'SalirToolStripMenuItem
         '
         Me.SalirToolStripMenuItem.Name = "SalirToolStripMenuItem"
-        Me.SalirToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.SalirToolStripMenuItem.Size = New System.Drawing.Size(115, 22)
         Me.SalirToolStripMenuItem.Text = "Salir"
         '
         'MostrarToolStripMenuItem
         '
         Me.MostrarToolStripMenuItem.Name = "MostrarToolStripMenuItem"
-        Me.MostrarToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.MostrarToolStripMenuItem.Size = New System.Drawing.Size(115, 22)
         Me.MostrarToolStripMenuItem.Text = "Mostrar"
         '
         'Form1
