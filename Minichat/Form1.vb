@@ -12,6 +12,9 @@ Imports Microsoft.Win32.Registry
 
 Public Class Form1
 
+    Private IPDestino As String = "172.26.255.255"
+    Private PuertoDestino As Integer = "20145"
+
     <DllImport("user32.dll")> _
     Public Shared Function FlashWindowEx(ByRef pfwi As FLASHWINFO) As Integer
     End Function
@@ -135,13 +138,13 @@ Public Class Form1
     End Sub
 
     Private Sub frmMain_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-        'Separamos el puerto 200145 para usarlo en nuestra aplicación
+        'Separamos el puerto 20145 para usarlo en nuestra aplicación
         ElSocket.Bind(New IPEndPoint(IPAddress.Any, 20145))
         'Habilitamos la opción Broadcast para el socket
         ElSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, True)
         HiloRecibir = New Thread(AddressOf RecibirDatos) 'Crea el hilo
         HiloRecibir.Start() 'Inicia el hilo
-        
+
         Select Case My.Settings.IniciarConWindows
             Case True
                 Me.ShowInTaskbar = False
@@ -152,7 +155,10 @@ Public Class Form1
                 txtMensaje.Focus()
                 start_Up(True)
         End Select
-        
+
+        IPDestinoTexto.Text = IPDestino
+        PuertoTexto.Text = PuertoDestino
+
     End Sub
 
     Private Sub RecibirDatos()
@@ -234,9 +240,10 @@ Public Class Form1
         DetenerParpadeo()
     End Sub
     Dim DatosBytes As Byte()
-    Dim DirecciónDestino As New IPEndPoint(IPAddress.Broadcast, 20145)
+    Dim DireccionDestino As New IPEndPoint(IPAddress.Parse(IPDestino), PuertoDestino)
 
     Private Sub TextBox2_KeyDown(sender As Object, e As KeyEventArgs) Handles txtMensaje.KeyDown
+
         If e.KeyCode = Keys.Enter Then
             Dim mensaje As String = txtMensaje.Text
             e.SuppressKeyPress = True
@@ -255,14 +262,13 @@ Public Class Form1
             End Select
 
             'Envía los datos
-            ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DirecciónDestino)
+            ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DireccionDestino)
             txtMensaje.Clear()
 
         End If
         If e.KeyCode = Keys.Escape Then
-            Dim DirecciónDestino As New IPEndPoint(IPAddress.Broadcast, 20145)
-            Dim DatosBytes As Byte() = Encoding.Default.GetBytes("/EMERGENCY")
-            ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DirecciónDestino)
+            DatosBytes = Encoding.Default.GetBytes("/EMERGENCY")
+            ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DireccionDestino)
             Environment.Exit(0)
         End If
     End Sub
@@ -279,7 +285,7 @@ Public Class Form1
 
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
         DatosBytes = Encoding.Default.GetBytes("/ZUMBIDO")
-        ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DirecciónDestino)
+        ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DireccionDestino)
     End Sub
 
     Private Function start_Up(ByVal bCreate As Boolean) As String
@@ -331,8 +337,16 @@ Public Class Form1
     Private Sub MostrarToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles MostrarToolStripMenuItem.Click
         Me.Show()
         Me.Visible = True
+        Me.ShowInTaskbar = True
         Me.WindowState = FormWindowState.Normal
 
     End Sub
 
+    Private Sub IPDestinoTexto_TextChanged(sender As Object, e As EventArgs) Handles IPDestinoTexto.TextChanged
+        IPDestino = IPDestinoTexto.Text
+    End Sub
+
+    Private Sub PuertoTexto_TextChanged(sender As Object, e As EventArgs) Handles PuertoTexto.TextChanged
+        PuertoDestino = PuertoTexto.Text
+    End Sub
 End Class

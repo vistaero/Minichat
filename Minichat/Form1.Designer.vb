@@ -32,6 +32,8 @@ Partial Class Form1
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
+        Me.IPDestinoTexto = New System.Windows.Forms.ToolStripTextBox()
+        Me.PuertoTexto = New System.Windows.Forms.ToolStripTextBox()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.SalirToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -98,7 +100,7 @@ Partial Class Form1
         'ToolStrip1
         '
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator1, Me.ToolStripButton1, Me.ToolStripButton2})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator1, Me.ToolStripButton1, Me.ToolStripButton2, Me.IPDestinoTexto, Me.PuertoTexto})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(620, 25)
@@ -126,6 +128,16 @@ Partial Class Form1
         Me.ToolStripButton2.Name = "ToolStripButton2"
         Me.ToolStripButton2.Size = New System.Drawing.Size(81, 22)
         Me.ToolStripButton2.Text = "Cambiar nick"
+        '
+        'IPDestinoTexto
+        '
+        Me.IPDestinoTexto.Name = "IPDestinoTexto"
+        Me.IPDestinoTexto.Size = New System.Drawing.Size(85, 25)
+        '
+        'PuertoTexto
+        '
+        Me.PuertoTexto.Name = "PuertoTexto"
+        Me.PuertoTexto.Size = New System.Drawing.Size(40, 25)
         '
         'NotifyIcon1
         '
@@ -187,5 +199,7 @@ Partial Class Form1
     Friend WithEvents ContextMenuStrip1 As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents SalirToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MostrarToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents IPDestinoTexto As System.Windows.Forms.ToolStripTextBox
+    Friend WithEvents PuertoTexto As System.Windows.Forms.ToolStripTextBox
 
 End Class
