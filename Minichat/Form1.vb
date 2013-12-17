@@ -12,7 +12,7 @@ Imports Microsoft.Win32.Registry
 
 Public Class Form1
 
-    Private IPDestino As String = "172.26.255.255"
+    Private IPDestino As String = "255.255.255.255"
     Private PuertoDestino As Integer = "20145"
 
     <DllImport("user32.dll")> _
@@ -137,13 +137,18 @@ Public Class Form1
 
     End Sub
 
-    Private Sub frmMain_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+    Private Sub IniciarSocket()
         'Separamos el puerto 20145 para usarlo en nuestra aplicación
-        ElSocket.Bind(New IPEndPoint(IPAddress.Any, 20145))
+        ElSocket.Bind(New IPEndPoint(IPAddress.Any, PuertoDestino))
         'Habilitamos la opción Broadcast para el socket
         ElSocket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, True)
         HiloRecibir = New Thread(AddressOf RecibirDatos) 'Crea el hilo
         HiloRecibir.Start() 'Inicia el hilo
+    End Sub
+
+    Private Sub frmMain_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        IniciarSocket()
+
 
         Select Case My.Settings.IniciarConWindows
             Case True
@@ -243,34 +248,39 @@ Public Class Form1
     Dim DireccionDestino As New IPEndPoint(IPAddress.Parse(IPDestino), PuertoDestino)
 
     Private Sub TextBox2_KeyDown(sender As Object, e As KeyEventArgs) Handles txtMensaje.KeyDown
-
-        If e.KeyCode = Keys.Enter Then
-            Dim mensaje As String = txtMensaje.Text
-            e.SuppressKeyPress = True
-            Select Case txtMensaje.Text
-                Case Is = "/ZUMBIDO"
-                    mensaje = "/ZUMBIDO"
-                    DatosBytes = Encoding.Default.GetBytes(mensaje)
-                Case Is = "/SHUTDOWN"
-                    mensaje = "/SHUTDOWN"
-                    DatosBytes = Encoding.Default.GetBytes(mensaje)
-                Case Is = "/EMERGENCY"
-                    mensaje = "/EMERGENCY"
-                    DatosBytes = Encoding.Default.GetBytes(mensaje)
-                Case Else
-                    DatosBytes = Encoding.Default.GetBytes(My.Settings.Usuario & ": " & txtMensaje.Text)
-            End Select
+        Dim mensaje As String = txtMensaje.Text
+        If e.KeyCode = Keys.Enter OrElse e.KeyCode = Keys.Escape Then
+            If e.KeyCode = Keys.Enter Then
+                e.SuppressKeyPress = True
+                Select Case txtMensaje.Text
+                    Case Is = "/ZUMBIDO"
+                        mensaje = "/ZUMBIDO"
+                        DatosBytes = Encoding.Default.GetBytes(mensaje)
+                    Case Is = "/SHUTDOWN"
+                        mensaje = "/SHUTDOWN"
+                        DatosBytes = Encoding.Default.GetBytes(mensaje)
+                    Case Is = "/EMERGENCY"
+                        mensaje = "/EMERGENCY"
+                        DatosBytes = Encoding.Default.GetBytes(mensaje)
+                    Case Else
+                        DatosBytes = Encoding.Default.GetBytes(My.Settings.Usuario & ": " & txtMensaje.Text)
+                End Select
+            End If
+            If e.KeyCode = Keys.Escape Then
+                mensaje = "/EMERGENCY"
+                DatosBytes = Encoding.Default.GetBytes(mensaje)
+            End If
 
             'Envía los datos
-            ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DireccionDestino)
-            txtMensaje.Clear()
+            If DireccionDestinoValida = True Then
+                ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DireccionDestino)
+                txtMensaje.Clear()
+            Else
+                MsgBox("La dirección de destino no es válida")
+            End If
 
         End If
-        If e.KeyCode = Keys.Escape Then
-            DatosBytes = Encoding.Default.GetBytes("/EMERGENCY")
-            ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DireccionDestino)
-            Environment.Exit(0)
-        End If
+
     End Sub
 
     Private Sub TextBox1_KeyDown(sender As Object, e As KeyEventArgs)
@@ -286,6 +296,8 @@ Public Class Form1
     Private Sub ToolStripButton1_Click(sender As Object, e As EventArgs) Handles ToolStripButton1.Click
         DatosBytes = Encoding.Default.GetBytes("/ZUMBIDO")
         ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DireccionDestino)
+        ToolStripButton1.Enabled = False
+        ZumbidoHabilitado.Enabled = True
     End Sub
 
     Private Function start_Up(ByVal bCreate As Boolean) As String
@@ -341,12 +353,39 @@ Public Class Form1
         Me.WindowState = FormWindowState.Normal
 
     End Sub
-
+    Private DireccionDestinoValida As Boolean = True
     Private Sub IPDestinoTexto_TextChanged(sender As Object, e As EventArgs) Handles IPDestinoTexto.TextChanged
-        IPDestino = IPDestinoTexto.Text
+        IPDestino = IPDestinoTexto.Text.ToString
+        Try
+            DireccionDestino.Address = IPAddress.Parse(IPDestino)
+            DireccionDestino.Port = PuertoDestino
+            DireccionDestinoValida = True
+        Catch ex As Exception
+            DireccionDestinoValida = False
+        End Try
+        
+
     End Sub
 
     Private Sub PuertoTexto_TextChanged(sender As Object, e As EventArgs) Handles PuertoTexto.TextChanged
         PuertoDestino = PuertoTexto.Text
+    End Sub
+
+    Private Sub ZumbidoHabilitado_Disposed(sender As Object, e As EventArgs) Handles ZumbidoHabilitado.Disposed
+        ToolStripButton1.Enabled = True
+
+    End Sub
+
+    Private Sub ZumbidoHabilitado_Tick(sender As Object, e As EventArgs) Handles ZumbidoHabilitado.Tick
+        ZumbidoHabilitado.Dispose()
+
+    End Sub
+
+    Private Sub IPDestinoTexto_Click(sender As Object, e As EventArgs) Handles IPDestinoTexto.Click
+        
+    End Sub
+
+    Private Sub txtMensaje_TextChanged(sender As Object, e As EventArgs) Handles txtMensaje.TextChanged
+
     End Sub
 End Class

@@ -38,6 +38,7 @@ Partial Class Form1
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.SalirToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MostrarToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ZumbidoHabilitado = New System.Windows.Forms.Timer(Me.components)
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -132,7 +133,7 @@ Partial Class Form1
         'IPDestinoTexto
         '
         Me.IPDestinoTexto.Name = "IPDestinoTexto"
-        Me.IPDestinoTexto.Size = New System.Drawing.Size(85, 25)
+        Me.IPDestinoTexto.Size = New System.Drawing.Size(90, 25)
         '
         'PuertoTexto
         '
@@ -163,6 +164,10 @@ Partial Class Form1
         Me.MostrarToolStripMenuItem.Name = "MostrarToolStripMenuItem"
         Me.MostrarToolStripMenuItem.Size = New System.Drawing.Size(115, 22)
         Me.MostrarToolStripMenuItem.Text = "Mostrar"
+        '
+        'ZumbidoHabilitado
+        '
+        Me.ZumbidoHabilitado.Interval = 1000
         '
         'Form1
         '
@@ -201,5 +206,6 @@ Partial Class Form1
     Friend WithEvents MostrarToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents IPDestinoTexto As System.Windows.Forms.ToolStripTextBox
     Friend WithEvents PuertoTexto As System.Windows.Forms.ToolStripTextBox
+    Friend WithEvents ZumbidoHabilitado As System.Windows.Forms.Timer
 
 End Class
