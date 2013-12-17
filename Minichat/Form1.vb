@@ -148,18 +148,20 @@ Public Class Form1
 
     Private Sub frmMain_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         IniciarSocket()
+        start_Up(True)
+        If My.Settings.IniciarConWindows = False Then
+            If My.Settings.Usuario.Equals("") Then Form2.ShowDialog()
+            Me.Show()
+            txtMensaje.Focus()
 
+        End If
 
-        Select Case My.Settings.IniciarConWindows
-            Case True
+        If My.Application.CommandLineArgs.Count > 0 Then
+            If My.Application.CommandLineArgs.First = "/h" Then
                 Me.ShowInTaskbar = False
                 Me.Visible = False
-            Case False
-                If My.Settings.Usuario.Equals("") Then Form2.ShowDialog()
-                Me.Show()
-                txtMensaje.Focus()
-                start_Up(True)
-        End Select
+            End If
+        End If
 
         IPDestinoTexto.Text = IPDestino
         PuertoTexto.Text = PuertoDestino
@@ -191,8 +193,6 @@ Public Class Form1
                 End If
             End Try
 
-
-
             'Convierte el tipo EndPoint a IPEndPoint con sus respectivas variables
             LaIPRemota = CType(IPRecibida, IPEndPoint)
             'Guarda los datos en variables temporales
@@ -221,13 +221,11 @@ Public Class Form1
             Addline = False
             Zumbido()
             ComenzarParpadeo()
-
         End If
 
         If ContenidoMensaje.StartsWith("/EMERGENCY") Then
             Environment.Exit(0)
         End If
-
 
         If Addline = True Then
             'Si txtDatosRecibidos está vacío:
@@ -241,47 +239,11 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub txtMensaje_GotFocus(sender As Object, e As EventArgs) Handles txtMensaje.GotFocus
+    Private Sub txtMensaje_GotFocus(sender As Object, e As EventArgs)
         DetenerParpadeo()
     End Sub
     Dim DatosBytes As Byte()
     Dim DireccionDestino As New IPEndPoint(IPAddress.Parse(IPDestino), PuertoDestino)
-
-    Private Sub TextBox2_KeyDown(sender As Object, e As KeyEventArgs) Handles txtMensaje.KeyDown
-        Dim mensaje As String = txtMensaje.Text
-        If e.KeyCode = Keys.Enter OrElse e.KeyCode = Keys.Escape Then
-            If e.KeyCode = Keys.Enter Then
-                e.SuppressKeyPress = True
-                Select Case txtMensaje.Text
-                    Case Is = "/ZUMBIDO"
-                        mensaje = "/ZUMBIDO"
-                        DatosBytes = Encoding.Default.GetBytes(mensaje)
-                    Case Is = "/SHUTDOWN"
-                        mensaje = "/SHUTDOWN"
-                        DatosBytes = Encoding.Default.GetBytes(mensaje)
-                    Case Is = "/EMERGENCY"
-                        mensaje = "/EMERGENCY"
-                        DatosBytes = Encoding.Default.GetBytes(mensaje)
-                    Case Else
-                        DatosBytes = Encoding.Default.GetBytes(My.Settings.Usuario & ": " & txtMensaje.Text)
-                End Select
-            End If
-            If e.KeyCode = Keys.Escape Then
-                mensaje = "/EMERGENCY"
-                DatosBytes = Encoding.Default.GetBytes(mensaje)
-            End If
-
-            'Envía los datos
-            If DireccionDestinoValida = True Then
-                ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DireccionDestino)
-                txtMensaje.Clear()
-            Else
-                MsgBox("La dirección de destino no es válida")
-            End If
-
-        End If
-
-    End Sub
 
     Private Sub TextBox1_KeyDown(sender As Object, e As KeyEventArgs)
         If e.KeyCode = Keys.Escape Then
@@ -311,7 +273,7 @@ Public Class Form1
                 Select Case bCreate
                     Case True
                         .SetValue(subClave, _
-                                  Application.ExecutablePath.ToString)
+                                  Application.ExecutablePath.ToString & " /h")
                         My.Settings.IniciarConWindows = True
                         My.Settings.Save()
                     Case False
@@ -351,8 +313,8 @@ Public Class Form1
         Me.Visible = True
         Me.ShowInTaskbar = True
         Me.WindowState = FormWindowState.Normal
-
     End Sub
+
     Private DireccionDestinoValida As Boolean = True
     Private Sub IPDestinoTexto_TextChanged(sender As Object, e As EventArgs) Handles IPDestinoTexto.TextChanged
         IPDestino = IPDestinoTexto.Text.ToString
@@ -363,7 +325,6 @@ Public Class Form1
         Catch ex As Exception
             DireccionDestinoValida = False
         End Try
-        
 
     End Sub
 
@@ -381,11 +342,50 @@ Public Class Form1
 
     End Sub
 
-    Private Sub IPDestinoTexto_Click(sender As Object, e As EventArgs) Handles IPDestinoTexto.Click
-        
+    Private Sub txtDatosRecibidos_TextChanged(sender As Object, e As EventArgs) Handles txtDatosRecibidos.TextChanged
+        'Mostrar siempre la última línea del TextBox.
+        txtDatosRecibidos.SelectionStart = txtDatosRecibidos.TextLength
+        txtDatosRecibidos.ScrollToCaret()
+
     End Sub
 
-    Private Sub txtMensaje_TextChanged(sender As Object, e As EventArgs) Handles txtMensaje.TextChanged
+    Private Sub txtMensaje_KeyDown(sender As Object, e As KeyEventArgs) Handles txtMensaje.KeyDown
+        Dim mensaje As String = txtMensaje.Text
+        If e.KeyCode = Keys.Enter OrElse e.KeyCode = Keys.Escape Then
+            If e.KeyCode = Keys.Enter Then
+                e.SuppressKeyPress = True
+                Select Case txtMensaje.Text
+                    Case Is = "/ZUMBIDO"
+                        mensaje = "/ZUMBIDO"
+                        DatosBytes = Encoding.Default.GetBytes(mensaje)
+                    Case Is = "/SHUTDOWN"
+                        mensaje = "/SHUTDOWN"
+                        DatosBytes = Encoding.Default.GetBytes(mensaje)
+                    Case Is = "/EMERGENCY"
+                        mensaje = "/EMERGENCY"
+                        DatosBytes = Encoding.Default.GetBytes(mensaje)
+                    Case Else
+                        DatosBytes = Encoding.Default.GetBytes(My.Settings.Usuario & ": " & txtMensaje.Text)
+                End Select
+            End If
+            If e.KeyCode = Keys.Escape Then
+                mensaje = "/EMERGENCY"
+                DatosBytes = Encoding.Default.GetBytes(mensaje)
+            End If
 
+            'Envía los datos
+            If Not txtMensaje.Text = "" OrElse txtMensaje.Text = vbNewLine Then
+                If DireccionDestinoValida = True Then
+                    ElSocket.SendTo(DatosBytes, DatosBytes.Length, SocketFlags.None, DireccionDestino)
+                    txtMensaje.Clear()
+                Else
+                    MsgBox("La dirección de destino no es válida")
+                End If
+            End If
+        End If
     End Sub
+
+    
+
+
 End Class

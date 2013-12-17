@@ -24,9 +24,8 @@ Partial Class Form1
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
-        Me.txtMensaje = New System.Windows.Forms.TextBox()
-        Me.txtDatosRecibidos = New System.Windows.Forms.TextBox()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.txtDatosRecibidos = New System.Windows.Forms.RichTextBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
@@ -39,6 +38,7 @@ Partial Class Form1
         Me.SalirToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MostrarToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ZumbidoHabilitado = New System.Windows.Forms.Timer(Me.components)
+        Me.txtMensaje = New System.Windows.Forms.RichTextBox()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
@@ -47,28 +47,6 @@ Partial Class Form1
         Me.ToolStrip1.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
         Me.SuspendLayout()
-        '
-        'txtMensaje
-        '
-        Me.txtMensaje.AcceptsReturn = True
-        Me.txtMensaje.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtMensaje.Location = New System.Drawing.Point(0, 0)
-        Me.txtMensaje.Multiline = True
-        Me.txtMensaje.Name = "txtMensaje"
-        Me.txtMensaje.Size = New System.Drawing.Size(620, 36)
-        Me.txtMensaje.TabIndex = 1
-        '
-        'txtDatosRecibidos
-        '
-        Me.txtDatosRecibidos.BackColor = System.Drawing.Color.White
-        Me.txtDatosRecibidos.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtDatosRecibidos.Location = New System.Drawing.Point(0, 0)
-        Me.txtDatosRecibidos.Multiline = True
-        Me.txtDatosRecibidos.Name = "txtDatosRecibidos"
-        Me.txtDatosRecibidos.ReadOnly = True
-        Me.txtDatosRecibidos.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtDatosRecibidos.Size = New System.Drawing.Size(620, 385)
-        Me.txtDatosRecibidos.TabIndex = 2
         '
         'SplitContainer1
         '
@@ -88,6 +66,15 @@ Partial Class Form1
         Me.SplitContainer1.Size = New System.Drawing.Size(620, 450)
         Me.SplitContainer1.SplitterDistance = 385
         Me.SplitContainer1.TabIndex = 4
+        '
+        'txtDatosRecibidos
+        '
+        Me.txtDatosRecibidos.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtDatosRecibidos.Location = New System.Drawing.Point(0, 0)
+        Me.txtDatosRecibidos.Name = "txtDatosRecibidos"
+        Me.txtDatosRecibidos.Size = New System.Drawing.Size(620, 385)
+        Me.txtDatosRecibidos.TabIndex = 0
+        Me.txtDatosRecibidos.Text = ""
         '
         'Panel1
         '
@@ -169,6 +156,15 @@ Partial Class Form1
         '
         Me.ZumbidoHabilitado.Interval = 1000
         '
+        'txtMensaje
+        '
+        Me.txtMensaje.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtMensaje.Location = New System.Drawing.Point(0, 0)
+        Me.txtMensaje.Name = "txtMensaje"
+        Me.txtMensaje.Size = New System.Drawing.Size(620, 36)
+        Me.txtMensaje.TabIndex = 0
+        Me.txtMensaje.Text = ""
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -179,21 +175,17 @@ Partial Class Form1
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.SplitContainer1.Panel1.ResumeLayout(False)
-        Me.SplitContainer1.Panel1.PerformLayout()
         Me.SplitContainer1.Panel2.ResumeLayout(False)
         Me.SplitContainer1.Panel2.PerformLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
-        Me.Panel1.PerformLayout()
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
         Me.ContextMenuStrip1.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents txtMensaje As System.Windows.Forms.TextBox
-    Friend WithEvents txtDatosRecibidos As System.Windows.Forms.TextBox
     Friend WithEvents SplitContainer1 As System.Windows.Forms.SplitContainer
     Friend WithEvents Panel1 As System.Windows.Forms.Panel
     Friend WithEvents ToolStrip1 As System.Windows.Forms.ToolStrip
@@ -207,5 +199,7 @@ Partial Class Form1
     Friend WithEvents IPDestinoTexto As System.Windows.Forms.ToolStripTextBox
     Friend WithEvents PuertoTexto As System.Windows.Forms.ToolStripTextBox
     Friend WithEvents ZumbidoHabilitado As System.Windows.Forms.Timer
+    Friend WithEvents txtDatosRecibidos As System.Windows.Forms.RichTextBox
+    Friend WithEvents txtMensaje As System.Windows.Forms.RichTextBox
 
 End Class

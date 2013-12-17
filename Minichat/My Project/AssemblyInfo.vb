@@ -8,10 +8,10 @@ Imports System.Runtime.InteropServices
 
 ' Revisar los valores de los atributos del ensamblado
 
-<Assembly: AssemblyTitle("Nyan")> 
+<Assembly: AssemblyTitle("NyanChat")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("Nyan")> 
+<Assembly: AssemblyProduct("NyanChat")> 
 <Assembly: AssemblyCopyright("Copyright ©  2013")> 
 <Assembly: AssemblyTrademark("")> 
 
