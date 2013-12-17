@@ -26,23 +26,26 @@ Partial Class Form1
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
         Me.txtDatosRecibidos = New System.Windows.Forms.RichTextBox()
+        Me.PuertoTexto = New System.Windows.Forms.NumericUpDown()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.txtMensaje = New System.Windows.Forms.RichTextBox()
         Me.ToolStrip1 = New System.Windows.Forms.ToolStrip()
         Me.ToolStripSeparator1 = New System.Windows.Forms.ToolStripSeparator()
         Me.ToolStripButton1 = New System.Windows.Forms.ToolStripButton()
         Me.ToolStripButton2 = New System.Windows.Forms.ToolStripButton()
+        Me.ToolStripLabel1 = New System.Windows.Forms.ToolStripLabel()
         Me.IPDestinoTexto = New System.Windows.Forms.ToolStripTextBox()
-        Me.PuertoTexto = New System.Windows.Forms.ToolStripTextBox()
+        Me.ToolStripLabel2 = New System.Windows.Forms.ToolStripLabel()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.ContextMenuStrip1 = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.SalirToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.MostrarToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ZumbidoHabilitado = New System.Windows.Forms.Timer(Me.components)
-        Me.txtMensaje = New System.Windows.Forms.RichTextBox()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SplitContainer1.Panel1.SuspendLayout()
         Me.SplitContainer1.Panel2.SuspendLayout()
         Me.SplitContainer1.SuspendLayout()
+        CType(Me.PuertoTexto, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.ToolStrip1.SuspendLayout()
         Me.ContextMenuStrip1.SuspendLayout()
@@ -61,6 +64,7 @@ Partial Class Form1
         '
         'SplitContainer1.Panel2
         '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.PuertoTexto)
         Me.SplitContainer1.Panel2.Controls.Add(Me.Panel1)
         Me.SplitContainer1.Panel2.Controls.Add(Me.ToolStrip1)
         Me.SplitContainer1.Size = New System.Drawing.Size(620, 450)
@@ -76,6 +80,16 @@ Partial Class Form1
         Me.txtDatosRecibidos.TabIndex = 0
         Me.txtDatosRecibidos.Text = ""
         '
+        'PuertoTexto
+        '
+        Me.PuertoTexto.Location = New System.Drawing.Point(362, 3)
+        Me.PuertoTexto.Maximum = New Decimal(New Integer() {65535, 0, 0, 0})
+        Me.PuertoTexto.Minimum = New Decimal(New Integer() {1, 0, 0, 0})
+        Me.PuertoTexto.Name = "PuertoTexto"
+        Me.PuertoTexto.Size = New System.Drawing.Size(78, 20)
+        Me.PuertoTexto.TabIndex = 4
+        Me.PuertoTexto.Value = New Decimal(New Integer() {20145, 0, 0, 0})
+        '
         'Panel1
         '
         Me.Panel1.Controls.Add(Me.txtMensaje)
@@ -85,10 +99,19 @@ Partial Class Form1
         Me.Panel1.Size = New System.Drawing.Size(620, 36)
         Me.Panel1.TabIndex = 3
         '
+        'txtMensaje
+        '
+        Me.txtMensaje.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.txtMensaje.Location = New System.Drawing.Point(0, 0)
+        Me.txtMensaje.Name = "txtMensaje"
+        Me.txtMensaje.Size = New System.Drawing.Size(620, 36)
+        Me.txtMensaje.TabIndex = 0
+        Me.txtMensaje.Text = ""
+        '
         'ToolStrip1
         '
         Me.ToolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden
-        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator1, Me.ToolStripButton1, Me.ToolStripButton2, Me.IPDestinoTexto, Me.PuertoTexto})
+        Me.ToolStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ToolStripSeparator1, Me.ToolStripButton1, Me.ToolStripButton2, Me.ToolStripLabel1, Me.IPDestinoTexto, Me.ToolStripLabel2})
         Me.ToolStrip1.Location = New System.Drawing.Point(0, 0)
         Me.ToolStrip1.Name = "ToolStrip1"
         Me.ToolStrip1.Size = New System.Drawing.Size(620, 25)
@@ -117,15 +140,22 @@ Partial Class Form1
         Me.ToolStripButton2.Size = New System.Drawing.Size(81, 22)
         Me.ToolStripButton2.Text = "Cambiar nick"
         '
+        'ToolStripLabel1
+        '
+        Me.ToolStripLabel1.Name = "ToolStripLabel1"
+        Me.ToolStripLabel1.Size = New System.Drawing.Size(63, 22)
+        Me.ToolStripLabel1.Text = "IP Destino:"
+        '
         'IPDestinoTexto
         '
         Me.IPDestinoTexto.Name = "IPDestinoTexto"
         Me.IPDestinoTexto.Size = New System.Drawing.Size(90, 25)
         '
-        'PuertoTexto
+        'ToolStripLabel2
         '
-        Me.PuertoTexto.Name = "PuertoTexto"
-        Me.PuertoTexto.Size = New System.Drawing.Size(40, 25)
+        Me.ToolStripLabel2.Name = "ToolStripLabel2"
+        Me.ToolStripLabel2.Size = New System.Drawing.Size(45, 22)
+        Me.ToolStripLabel2.Text = "Puerto:"
         '
         'NotifyIcon1
         '
@@ -156,15 +186,6 @@ Partial Class Form1
         '
         Me.ZumbidoHabilitado.Interval = 1000
         '
-        'txtMensaje
-        '
-        Me.txtMensaje.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.txtMensaje.Location = New System.Drawing.Point(0, 0)
-        Me.txtMensaje.Name = "txtMensaje"
-        Me.txtMensaje.Size = New System.Drawing.Size(620, 36)
-        Me.txtMensaje.TabIndex = 0
-        Me.txtMensaje.Text = ""
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -179,6 +200,7 @@ Partial Class Form1
         Me.SplitContainer1.Panel2.PerformLayout()
         CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.SplitContainer1.ResumeLayout(False)
+        CType(Me.PuertoTexto, System.ComponentModel.ISupportInitialize).EndInit()
         Me.Panel1.ResumeLayout(False)
         Me.ToolStrip1.ResumeLayout(False)
         Me.ToolStrip1.PerformLayout()
@@ -197,9 +219,11 @@ Partial Class Form1
     Friend WithEvents SalirToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents MostrarToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents IPDestinoTexto As System.Windows.Forms.ToolStripTextBox
-    Friend WithEvents PuertoTexto As System.Windows.Forms.ToolStripTextBox
     Friend WithEvents ZumbidoHabilitado As System.Windows.Forms.Timer
     Friend WithEvents txtDatosRecibidos As System.Windows.Forms.RichTextBox
     Friend WithEvents txtMensaje As System.Windows.Forms.RichTextBox
+    Friend WithEvents ToolStripLabel1 As System.Windows.Forms.ToolStripLabel
+    Friend WithEvents ToolStripLabel2 As System.Windows.Forms.ToolStripLabel
+    Friend WithEvents PuertoTexto As System.Windows.Forms.NumericUpDown
 
 End Class

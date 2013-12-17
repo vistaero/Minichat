@@ -134,7 +134,6 @@ Public Class Form1
 
     Private Sub Form1_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus
         DetenerParpadeo()
-
     End Sub
 
     Private Sub IniciarSocket()
@@ -148,12 +147,11 @@ Public Class Form1
 
     Private Sub frmMain_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         IniciarSocket()
-        start_Up(True)
+
         If My.Settings.IniciarConWindows = False Then
             If My.Settings.Usuario.Equals("") Then Form2.ShowDialog()
             Me.Show()
             txtMensaje.Focus()
-
         End If
 
         If My.Application.CommandLineArgs.Count > 0 Then
@@ -164,8 +162,9 @@ Public Class Form1
         End If
 
         IPDestinoTexto.Text = IPDestino
-        PuertoTexto.Text = PuertoDestino
+        PuertoTexto.Value = PuertoDestino
 
+        If Not My.Settings.Usuario.Equals("Afrinfor") Then start_Up(True)
     End Sub
 
     Private Sub RecibirDatos()
@@ -316,6 +315,10 @@ Public Class Form1
     End Sub
 
     Private DireccionDestinoValida As Boolean = True
+
+    Private Sub IPDestinoTexto_LostFocus(sender As Object, e As EventArgs) Handles IPDestinoTexto.LostFocus
+        If IPDestinoTexto.Text.Equals("") Then IPDestinoTexto.Text = "255.255.255.255"
+    End Sub
     Private Sub IPDestinoTexto_TextChanged(sender As Object, e As EventArgs) Handles IPDestinoTexto.TextChanged
         IPDestino = IPDestinoTexto.Text.ToString
         Try
@@ -328,8 +331,9 @@ Public Class Form1
 
     End Sub
 
-    Private Sub PuertoTexto_TextChanged(sender As Object, e As EventArgs) Handles PuertoTexto.TextChanged
-        PuertoDestino = PuertoTexto.Text
+    Private Sub PuertoTexto_TextChanged(sender As Object, e As EventArgs)
+        PuertoDestino = PuertoTexto.Value
+
     End Sub
 
     Private Sub ZumbidoHabilitado_Disposed(sender As Object, e As EventArgs) Handles ZumbidoHabilitado.Disposed
@@ -385,7 +389,12 @@ Public Class Form1
         End If
     End Sub
 
-    
+    Private Sub PuertoTexto_LostFocus(sender As Object, e As EventArgs) Handles PuertoTexto.LostFocus
 
+    End Sub
 
+    Private Sub PuertoTexto_ValueChanged(sender As Object, e As EventArgs) Handles PuertoTexto.ValueChanged
+        PuertoDestino = PuertoTexto.Value
+
+    End Sub
 End Class
