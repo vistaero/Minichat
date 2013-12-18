@@ -150,6 +150,7 @@ Partial Class Form1
         '
         Me.IPDestinoTexto.Name = "IPDestinoTexto"
         Me.IPDestinoTexto.Size = New System.Drawing.Size(90, 25)
+        Me.IPDestinoTexto.Text = "255.255.255.255"
         '
         'ToolStripLabel2
         '

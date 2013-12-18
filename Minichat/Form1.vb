@@ -132,10 +132,6 @@ Public Class Form1
         e.Cancel = True
     End Sub
 
-    Private Sub Form1_GotFocus(sender As Object, e As EventArgs) Handles Me.GotFocus
-        DetenerParpadeo()
-    End Sub
-
     Private Sub IniciarSocket()
         'Separamos el puerto 20145 para usarlo en nuestra aplicación
         ElSocket.Bind(New IPEndPoint(IPAddress.Any, PuertoDestino))
@@ -319,8 +315,10 @@ Public Class Form1
     Private Sub IPDestinoTexto_LostFocus(sender As Object, e As EventArgs) Handles IPDestinoTexto.LostFocus
         If IPDestinoTexto.Text.Equals("") Then IPDestinoTexto.Text = "255.255.255.255"
     End Sub
-    Private Sub IPDestinoTexto_TextChanged(sender As Object, e As EventArgs) Handles IPDestinoTexto.TextChanged
+
+    Private Sub ActualizarDestino()
         IPDestino = IPDestinoTexto.Text.ToString
+        PuertoDestino = PuertoTexto.Value
         Try
             DireccionDestino.Address = IPAddress.Parse(IPDestino)
             DireccionDestino.Port = PuertoDestino
@@ -328,6 +326,10 @@ Public Class Form1
         Catch ex As Exception
             DireccionDestinoValida = False
         End Try
+    End Sub
+    Private Sub IPDestinoTexto_TextChanged(sender As Object, e As EventArgs) Handles IPDestinoTexto.TextChanged
+        ActualizarDestino()
+
 
     End Sub
 
@@ -351,6 +353,10 @@ Public Class Form1
         txtDatosRecibidos.SelectionStart = txtDatosRecibidos.TextLength
         txtDatosRecibidos.ScrollToCaret()
 
+    End Sub
+
+    Private Sub txtMensaje_GotFocus1(sender As Object, e As EventArgs) Handles txtMensaje.GotFocus
+        DetenerParpadeo()
     End Sub
 
     Private Sub txtMensaje_KeyDown(sender As Object, e As KeyEventArgs) Handles txtMensaje.KeyDown
@@ -389,12 +395,17 @@ Public Class Form1
         End If
     End Sub
 
-    Private Sub PuertoTexto_LostFocus(sender As Object, e As EventArgs) Handles PuertoTexto.LostFocus
+    Private Sub PuertoTexto_ValueChanged(sender As Object, e As EventArgs) Handles PuertoTexto.ValueChanged
+        PuertoDestino = PuertoTexto.Value
+        ActualizarDestino()
 
     End Sub
 
-    Private Sub PuertoTexto_ValueChanged(sender As Object, e As EventArgs) Handles PuertoTexto.ValueChanged
-        PuertoDestino = PuertoTexto.Value
+    Private Sub IPDestinoTexto_Click(sender As Object, e As EventArgs) Handles IPDestinoTexto.Click
+
+    End Sub
+
+    Private Sub txtMensaje_TextChanged(sender As Object, e As EventArgs) Handles txtMensaje.TextChanged
 
     End Sub
 End Class
