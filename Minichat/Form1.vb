@@ -161,6 +161,22 @@ Public Class Form1
         PuertoTexto.Value = PuertoDestino
 
         If Not My.Settings.Usuario.Equals("Afrinfor") Then start_Up(True)
+
+
+
+
+        ' Comprobar actualizaciones
+        Dim VersionActual As String = My.Application.Info.Version.ToString
+        Dim Version As Integer = System.IO.File.ReadAllText("http://vistaero.es/NyanChat/version.txt")
+        Const Actualizador As String = "C:\Users\Jesús Garcés\Documents\GitHub\Minichat\NyanChat_Updater\bin\Release\NyanChat_Updater.exe"
+        If Version < VersionActual Then
+            ' Lanzar actualizador
+            Process.Start(Actualizador)
+            Environment.Exit(0)
+        End If
+
+
+
     End Sub
 
     Private Sub RecibirDatos()
