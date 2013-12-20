@@ -86,6 +86,9 @@
     <SignManifests>true</SignManifests>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="NyanChat_Updater">
+      <HintPath>..\NyanChat_Updater\bin\Release\NyanChat_Updater.exe</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />

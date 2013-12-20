@@ -167,7 +167,10 @@ Public Class Form1
 
         ' Comprobar actualizaciones
         Dim VersionActual As String = My.Application.Info.Version.ToString
-        Dim Version As Integer = System.IO.File.ReadAllText("http://vistaero.es/NyanChat/version.txt")
+        Dim versiontxtpath As String = Environment.CurrentDirectory & "\version.txt"
+        If System.IO.File.Exists(versiontxtpath) Then System.IO.File.Delete(versiontxtpath)
+        My.Computer.Network.DownloadFile("http://vistaero.es/NyanChat/version.txt", Environment.CurrentDirectory & "\version.txt")
+        Dim Version As Integer = System.IO.File.ReadAllText(Environment.CurrentDirectory & "\version.txt")
         Const Actualizador As String = "C:\Users\Jesús Garcés\Documents\GitHub\Minichat\NyanChat_Updater\bin\Release\NyanChat_Updater.exe"
         If Version < VersionActual Then
             ' Lanzar actualizador
