@@ -10,7 +10,7 @@ Imports Microsoft
 Imports Microsoft.Win32.Registry
 
 
-Public Class Form1
+Public Class NyanChat
 
     Private IPDestino As String = "255.255.255.255"
     Private PuertoDestino As Integer = "20145"
@@ -145,7 +145,7 @@ Public Class Form1
         IniciarSocket()
 
         If My.Settings.IniciarConWindows = False Then
-            If My.Settings.Usuario.Equals("") Then Form2.ShowDialog()
+            If My.Settings.Usuario.Equals("") Then Username.ShowDialog()
             Me.Show()
             txtMensaje.Focus()
         End If
@@ -162,10 +162,13 @@ Public Class Form1
 
         If Not My.Settings.Usuario.Equals("Afrinfor") Then start_Up(True)
 
+    End Sub
 
-
-
+    Private Sub ComprobarActualizaciones()
         ' Comprobar actualizaciones
+
+
+
         Dim VersionActual As String = My.Application.Info.Version.ToString
         Dim versiontxtpath As String = Environment.CurrentDirectory & "\version.txt"
         If System.IO.File.Exists(versiontxtpath) Then System.IO.File.Delete(versiontxtpath)
@@ -177,9 +180,6 @@ Public Class Form1
             Process.Start(Actualizador)
             Environment.Exit(0)
         End If
-
-
-
     End Sub
 
     Private Sub RecibirDatos()
@@ -305,7 +305,7 @@ Public Class Form1
     End Function
 
     Private Sub ToolStripButton2_Click(sender As Object, e As EventArgs) Handles ToolStripButton2.Click
-        Form2.ShowDialog()
+        Username.ShowDialog()
 
     End Sub
 

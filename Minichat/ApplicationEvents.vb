@@ -1,5 +1,6 @@
 ﻿Namespace My
-    ' Los siguientes eventos están disponibles para MyApplication:
+
+    ' Los siguientes eventos están disponibles para MyApplication:
     ' 
     ' Inicio: se desencadena cuando se inicia la aplicación, antes de que se cree el formulario de inicio.
     ' Apagado: generado después de cerrar todos los formularios de la aplicación. Este evento no se genera si la aplicación termina de forma anómala.
@@ -11,14 +12,14 @@
     ByVal sender As Object,
     ByVal e As Microsoft.VisualBasic.ApplicationServices.StartupNextInstanceEventArgs
 ) Handles Me.StartupNextInstance
-            Form1.Show()
-            Form1.Visible = True
-            Form1.ShowInTaskbar = True
-            Form1.WindowState = FormWindowState.Normal
+            NyanChat.Show()
+            NyanChat.Visible = True
+            NyanChat.ShowInTaskbar = True
+            NyanChat.WindowState = FormWindowState.Normal
 
         End Sub
     End Class
-    
+
 
 
 

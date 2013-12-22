@@ -1,4 +1,4 @@
-﻿Public Class Form2
+﻿Public Class Username
 
     Private Sub Form2_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
 
