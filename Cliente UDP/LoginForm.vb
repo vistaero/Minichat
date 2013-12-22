@@ -22,7 +22,10 @@ Public Class LoginForm
     End Sub
 
     Private Sub btnOK_Click(sender As Object, e As EventArgs) Handles btnOK.Click
+
+
         strName = txtName.Text
+
         Try
             'Using UDP sockets
             clientSocket = New Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
@@ -44,16 +47,20 @@ Public Class LoginForm
             'Login to the server
             clientSocket.BeginSendTo(byteData, 0, byteData.Length, SocketFlags.None, epServer, New AsyncCallback(AddressOf OnSend), _
                 Nothing)
+
+            Dim sgsClientForm As New SGSClient()
+            sgsClientForm.clientSocket = Me.clientSocket
+            sgsClientForm.strName = Me.strName
+            sgsClientForm.epServer = Me.epServer
+
+            sgsClientForm.ShowDialog()
+
+
         Catch ex As Exception
             MessageBox.Show(ex.Message, "SGSclient", MessageBoxButtons.OK, MessageBoxIcon.[Error])
         End Try
 
-
-        SGSClient.clientSocket = Me.clientSocket
-        SGSClient.strName = Me.strName
-        SGSClient.epServer = Me.epServer
-
-        SGSClient.ShowDialog()
+        
 
     End Sub
 

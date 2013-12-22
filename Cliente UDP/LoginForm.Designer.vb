@@ -54,6 +54,7 @@ Partial Class LoginForm
         Me.txtServerIP.Name = "txtServerIP"
         Me.txtServerIP.Size = New System.Drawing.Size(171, 20)
         Me.txtServerIP.TabIndex = 9
+        Me.txtServerIP.Text = "127.0.0.1"
         '
         'txtName
         '
@@ -61,6 +62,7 @@ Partial Class LoginForm
         Me.txtName.Name = "txtName"
         Me.txtName.Size = New System.Drawing.Size(171, 20)
         Me.txtName.TabIndex = 8
+        Me.txtName.Text = "vistaero"
         '
         'btnOK
         '

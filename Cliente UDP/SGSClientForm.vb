@@ -141,6 +141,7 @@ Partial Public Class SGSClient
     End Sub
 
     Private Sub SGSClient_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+
         CheckForIllegalCrossThreadCalls = False
 
         Me.Text = "SGSclient: " & strName
