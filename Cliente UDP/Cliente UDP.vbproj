@@ -6,11 +6,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D7580804-5A00-41D2-8C8D-BEA00B8BBBD4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>Cliente_UDP.My.MyApplication</StartupObject>
+    <StartupObject>Cliente_UDP.SGSclient.Program</StartupObject>
     <RootNamespace>Cliente_UDP</RootNamespace>
     <AssemblyName>Cliente UDP</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>WindowsForms</MyType>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -71,13 +71,6 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Form1.Designer.vb">
-      <DependentUpon>Form1.vb</DependentUpon>
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="LoginForm.Designer.vb">
       <DependentUpon>LoginForm.vb</DependentUpon>
     </Compile>
@@ -99,6 +92,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Startup.vb" />
     <Compile Include="SGSClientForm.Designer.vb">
       <DependentUpon>SGSClientForm.vb</DependentUpon>
     </Compile>
